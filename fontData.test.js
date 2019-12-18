@@ -1,5 +1,4 @@
 const path = require("path");
-const test = require("ava");
 const { parseFontFile, buildCssFontFace } = require("./fontData");
 
 const fixtureFontPath = path.resolve(
@@ -9,10 +8,10 @@ const fixtureFontPath = path.resolve(
   "Fraunces-VF.ttf"
 );
 
-test("Extracts axes", async t => {
+test("Extracts axes", async () => {
   const fontData = await parseFontFile(fixtureFontPath);
 
-  t.deepEqual(fontData.data.axes, [
+  expect(fontData.data.axes).toEqual([
     {
       axis: "opsz",
       name: "Optical Size",
@@ -37,10 +36,10 @@ test("Extracts axes", async t => {
   ]);
 });
 
-test("Extracts charset", async t => {
+test("Extracts charset", async () => {
   const fontData = await parseFontFile(fixtureFontPath);
 
-  t.deepEqual(fontData.data.charset, [
+  expect(fontData.data.charset).toEqual([
     "&#32;",
     "&#33;",
     "&#34;",
@@ -142,10 +141,10 @@ test("Extracts charset", async t => {
   ]);
 });
 
-test("Extracts instances", async t => {
+test("Extracts instances", async () => {
   const fontData = await parseFontFile(fixtureFontPath);
 
-  t.deepEqual(fontData.data.instances, [
+  expect(fontData.data.instances).toEqual([
     {
       name: "Black OpMax",
       axes: {
@@ -293,7 +292,7 @@ test("Extracts instances", async t => {
   ]);
 });
 
-test("builds basic css @font-face declaration", t => {
+test("builds basic css @font-face declaration", () => {
   const fontData = {
     name: "My font",
     data: {
@@ -307,8 +306,8 @@ test("builds basic css @font-face declaration", t => {
     fontData,
     "./test/__fixtures__/Fraunces-VF.ttf"
   );
-  t.deepEqual(
-    fontFace,
+
+  expect(fontFace).toEqual(
     "@font-face {\n" +
       "    font-family: My font;\n" +
       '    src: url("./test/__fixtures__/Fraunces-VF.ttf")\n' +
@@ -316,7 +315,7 @@ test("builds basic css @font-face declaration", t => {
   );
 });
 
-test("includes font-weight in @font-face declaration if wght axis present", t => {
+test("includes font-weight in @font-face declaration if wght axis present", () => {
   const fontData = {
     name: "My font",
     data: {
@@ -338,8 +337,8 @@ test("includes font-weight in @font-face declaration if wght axis present", t =>
     fontData,
     "./test/__fixtures__/Fraunces-VF.ttf"
   );
-  t.deepEqual(
-    fontFace,
+
+  expect(fontFace).toEqual(
     "@font-face {\n" +
       "    font-family: My font;\n" +
       '    src: url("./test/__fixtures__/Fraunces-VF.ttf");\n' +
@@ -348,7 +347,7 @@ test("includes font-weight in @font-face declaration if wght axis present", t =>
   );
 });
 
-test("includes font-stretch in @font-face declaration if wdth axis present", t => {
+test("includes font-stretch in @font-face declaration if wdth axis present", () => {
   const fontData = {
     name: "My font",
     data: {
@@ -370,8 +369,8 @@ test("includes font-stretch in @font-face declaration if wdth axis present", t =
     fontData,
     "./test/__fixtures__/Fraunces-VF.ttf"
   );
-  t.deepEqual(
-    fontFace,
+
+  expect(fontFace).toEqual(
     "@font-face {\n" +
       "    font-family: My font;\n" +
       '    src: url("./test/__fixtures__/Fraunces-VF.ttf");\n' +
