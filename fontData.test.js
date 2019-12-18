@@ -1,5 +1,5 @@
 const path = require("path");
-const { parseFontFile, buildCssFontFace } = require("./fontData");
+const { parseFontFile } = require("./fontData");
 
 const fixtureFontPath = path.resolve(
   __dirname,
@@ -290,91 +290,4 @@ test("Extracts instances", async () => {
       }
     }
   ]);
-});
-
-test("builds basic css @font-face declaration", () => {
-  const fontData = {
-    name: "My font",
-    data: {
-      axes: [],
-      charset: [],
-      instances: []
-    }
-  };
-
-  const fontFace = buildCssFontFace(
-    fontData,
-    "./test/__fixtures__/Fraunces-VF.ttf"
-  );
-
-  expect(fontFace).toEqual(
-    "@font-face {\n" +
-      "    font-family: My font;\n" +
-      '    src: url("./test/__fixtures__/Fraunces-VF.ttf")\n' +
-      "}"
-  );
-});
-
-test("includes font-weight in @font-face declaration if wght axis present", () => {
-  const fontData = {
-    name: "My font",
-    data: {
-      axes: [
-        {
-          axis: "wght",
-          name: "Weight",
-          min: 0,
-          max: 1000,
-          default: 0
-        }
-      ],
-      charset: [],
-      instances: []
-    }
-  };
-
-  const fontFace = buildCssFontFace(
-    fontData,
-    "./test/__fixtures__/Fraunces-VF.ttf"
-  );
-
-  expect(fontFace).toEqual(
-    "@font-face {\n" +
-      "    font-family: My font;\n" +
-      '    src: url("./test/__fixtures__/Fraunces-VF.ttf");\n' +
-      "    font-weight: 1 1000\n" +
-      "}"
-  );
-});
-
-test("includes font-stretch in @font-face declaration if wdth axis present", () => {
-  const fontData = {
-    name: "My font",
-    data: {
-      axes: [
-        {
-          axis: "wdth",
-          name: "Width",
-          min: 50,
-          max: 200,
-          default: 100
-        }
-      ],
-      charset: [],
-      instances: []
-    }
-  };
-
-  const fontFace = buildCssFontFace(
-    fontData,
-    "./test/__fixtures__/Fraunces-VF.ttf"
-  );
-
-  expect(fontFace).toEqual(
-    "@font-face {\n" +
-      "    font-family: My font;\n" +
-      '    src: url("./test/__fixtures__/Fraunces-VF.ttf");\n' +
-      "    font-stretch: 50 200\n" +
-      "}"
-  );
 });
