@@ -1,5 +1,6 @@
 const util = require("util");
 const loadFont = util.promisify(require("fontkit").open);
+const postcss = require("postcss");
 
 const buildAxes = font => {
   return Object.entries(font.variationAxes).map(([axis, data]) => ({
@@ -50,7 +51,7 @@ const axisRangeDeclaration = (fontData, property, axisName) => {
     const min = Math.max(axis.min, 1); // 0 is not valid in css in this context
     const max = axis.max;
 
-    return `${property}: ${min} ${max};`;
+    return postcss.decl({ prop: property, value: `${min} ${max}` });
   };
 
   return axis ? declaration(axis) : null;
@@ -68,18 +69,21 @@ const axisRangeDeclaration = (fontData, property, axisName) => {
  * @param {string} relativeFontPath
  */
 const buildCssFontFace = (fontData, relativeFontPath) => {
-  const declarations =
-    [
-      `font-family: ${fontData.name};`,
-      axisRangeDeclaration(fontData, "font-weight", "wght"),
-      axisRangeDeclaration(fontData, "font-stretch", "wdth"),
-      `src: url("${relativeFontPath}");`
-    ]
-      .filter(d => d != null)
-      .map(d => `  ${d}`)
-      .join("\n") + "\n";
+  const root = postcss.root();
 
-  return `@font-face {\n${declarations}}`;
+  const fontFace = postcss.atRule({ name: "font-face" });
+
+  const decls = [
+    postcss.decl({ prop: "font-family", value: fontData.name }),
+    postcss.decl({ prop: "src", value: `url("${relativeFontPath}")` }),
+    axisRangeDeclaration(fontData, "font-weight", "wght"),
+    axisRangeDeclaration(fontData, "font-stretch", "wdth")
+  ].filter(d => d != null);
+
+  fontFace.append(decls);
+  root.append(fontFace);
+
+  return root.toString();
 };
 
 module.exports.parseFontFile = parseFontFile;

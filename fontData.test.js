@@ -310,8 +310,8 @@ test("builds basic css @font-face declaration", t => {
   t.deepEqual(
     fontFace,
     "@font-face {\n" +
-      "  font-family: My font;\n" +
-      '  src: url("./test/__fixtures__/Fraunces-VF.ttf");\n' +
+      "    font-family: My font;\n" +
+      '    src: url("./test/__fixtures__/Fraunces-VF.ttf")\n' +
       "}"
   );
 });
@@ -341,9 +341,9 @@ test("includes font-weight in @font-face declaration if wght axis present", t =>
   t.deepEqual(
     fontFace,
     "@font-face {\n" +
-      "  font-family: My font;\n" +
-      "  font-weight: 1 1000;\n" +
-      '  src: url("./test/__fixtures__/Fraunces-VF.ttf");\n' +
+      "    font-family: My font;\n" +
+      '    src: url("./test/__fixtures__/Fraunces-VF.ttf");\n' +
+      "    font-weight: 1 1000\n" +
       "}"
   );
 });
@@ -373,9 +373,9 @@ test("includes font-stretch in @font-face declaration if wdth axis present", t =
   t.deepEqual(
     fontFace,
     "@font-face {\n" +
-      "  font-family: My font;\n" +
-      "  font-stretch: 50 200;\n" +
-      '  src: url("./test/__fixtures__/Fraunces-VF.ttf");\n' +
+      "    font-family: My font;\n" +
+      '    src: url("./test/__fixtures__/Fraunces-VF.ttf");\n' +
+      "    font-stretch: 50 200\n" +
       "}"
   );
 });
