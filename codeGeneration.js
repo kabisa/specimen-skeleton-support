@@ -1,4 +1,30 @@
 const postcss = require("postcss");
+const Stringifier = require("postcss/lib/stringifier");
+
+/**
+ * Custom PostCSS Stringifier that 'pretty prints' CSS.
+ * Currently it only applies spacing between rules.
+ */
+class PrettyStringifier extends Stringifier {
+  static new() {
+    return (node, builder) => {
+      let str = new this(builder);
+      str.stringify(node);
+    };
+  }
+
+  constructor(builder) {
+    super(builder);
+  }
+
+  rule(node) {
+    if (node.prev()) {
+      this.builder("\n", node);
+    }
+
+    return super.rule(node);
+  }
+}
 
 /**
  * Generates a css declaration based on a font axis.
@@ -112,6 +138,12 @@ const buildStylesheet = (fontData, relativeFontPath) => {
     buildProperties(fontData),
     buildFontVariationSettings(fontData)
   ]);
+
+  /* Use custom Stringifier to 'pretty print' by default */
+  const _toString = root.toString;
+  root.toString = function(stringifier) {
+    return _toString.call(root, stringifier || PrettyStringifier.new());
+  };
 
   return root;
 };
