@@ -229,16 +229,13 @@ describe("stylesheet", () => {
           font-weight: 1 1000;
           font-stretch: 50 200
       }
-
       body {
           font-family: "My font",monospace
       }
-
       :root {
           --wdth: 100;
           --wght: 0
       }
-
       *, *::before, *::after {
           font-variation-settings: "wdth" var(--wdth),"wght" var(--wght)
       }

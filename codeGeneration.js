@@ -118,17 +118,6 @@ const buildBodyRule = fontData => {
   return rule;
 };
 
-/**
- * Generate a stylesheet for the passed font.
- *
- * Includes:
- * - @font-face
- * - CSS properties for each axis of the font
- * - A body rule that applies the given font
- * - Font varation settings that use the generated properties
- * @param {object} fontData
- * @param {string} relativeFontPath
- */
 const buildStylesheet = (fontData, relativeFontPath) => {
   const root = postcss.root();
 
@@ -139,12 +128,6 @@ const buildStylesheet = (fontData, relativeFontPath) => {
     buildFontVariationSettings(fontData)
   ]);
 
-  /* Use custom Stringifier to 'pretty print' by default */
-  const _toString = root.toString;
-  root.toString = function(stringifier) {
-    return _toString.call(root, stringifier || PrettyStringifier.new());
-  };
-
   return root;
 };
 
@@ -153,3 +136,4 @@ module.exports.buildProperties = buildProperties;
 module.exports.buildFontVariationSettings = buildFontVariationSettings;
 module.exports.buildBodyRule = buildBodyRule;
 module.exports.buildStylesheet = buildStylesheet;
+module.exports.PrettyStringifier = PrettyStringifier;
