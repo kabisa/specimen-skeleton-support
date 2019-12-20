@@ -1,4 +1,6 @@
 const path = require("path");
+const { stripIndent } = require("common-tags");
+
 const lib = require("./index");
 const fontData = require("./fontData");
 const codeGeneration = require("./codeGeneration");
@@ -24,7 +26,28 @@ describe("buildStylesheet", () => {
     const fontData = await lib.parseFontFile(fixtureFontPath);
 
     const stylesheet = lib.buildStylesheet(fontData);
-    expect(typeof stylesheet).toEqual("string");
+
+    expect(stylesheet).toEqual(stripIndent`
+      @font-face {
+          font-family: "Fraunces-LightOpMin";
+          src: url("undefined");
+          font-weight: 1 1000;
+      }
+      
+      body {
+          font-family: "Fraunces-LightOpMin", monospace;
+      }
+      
+      :root {
+          --opsz: 9;
+          --wght: 0;
+          --WONK: 0.5;
+      }
+      
+      *, *::before, *::after {
+          font-variation-settings: "opsz" var(--opsz),"wght" var(--wght),"WONK" var(--WONK);
+      }
+    `);
   });
 });
 

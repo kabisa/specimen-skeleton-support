@@ -24,6 +24,10 @@ class PrettyStringifier extends Stringifier {
 
     return super.rule(node);
   }
+
+  decl(node) {
+    return super.decl(node, true); // force semicolon
+  }
 }
 
 /**
@@ -111,7 +115,7 @@ const buildBodyRule = fontData => {
   rule.append(
     postcss.decl({
       prop: "font-family",
-      value: [`"${fontData.name}"`, "monospace"]
+      value: `"${fontData.name}", monospace`
     })
   );
 

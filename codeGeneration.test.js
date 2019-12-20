@@ -186,7 +186,7 @@ describe("body rule", () => {
 
     expect(css).toEqual(stripIndent`
       body {
-          font-family: "My Font",monospace
+          font-family: "My Font", monospace
       }
     `);
   });
@@ -207,7 +207,7 @@ describe("stylesheet", () => {
           font-stretch: 50 200
       }
       body {
-          font-family: "My font",monospace
+          font-family: "My font", monospace
       }
       :root {
           --wdth: 100;
