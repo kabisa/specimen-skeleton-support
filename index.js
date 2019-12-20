@@ -9,7 +9,7 @@ const codeGeneration = require("./codeGeneration");
  * - CSS properties for each axis of the font
  * - A body rule that applies the given font
  * - Font varation settings that use the generated properties
- * @param {object} fontData
+ * @param {fontData} fontData
  * @param {string} relativeFontPath
  */
 const buildStylesheet = (fontData, relativeFontPath) => {
@@ -25,7 +25,16 @@ const parseFontFile = async path => {
   return fontData.parseFontFile(path);
 };
 
+/**
+ * Builds JS module for the provided fontData.
+ * @param {fontData} fontData
+ */
+const buildFontJs = fontData => {
+  return codeGeneration.buildFontJs(fontData);
+};
+
 module.exports = {
   parseFontFile,
-  buildStylesheet
+  buildStylesheet,
+  buildFontJs
 };

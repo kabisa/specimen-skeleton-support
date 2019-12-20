@@ -5,8 +5,33 @@ const {
   buildProperties,
   buildFontVariationSettings,
   buildBodyRule,
-  buildStylesheet
+  buildStylesheet,
+  buildFontJs
 } = require("./codeGeneration");
+
+const fontDataFixture = {
+  name: "My font",
+  data: {
+    axes: [
+      {
+        axis: "wdth",
+        name: "Width",
+        min: 50,
+        max: 200,
+        default: 100
+      },
+      {
+        axis: "wght",
+        name: "Weight",
+        min: 0,
+        max: 1000,
+        default: 0
+      }
+    ],
+    charset: [],
+    instances: []
+  }
+};
 
 describe("@font-face", () => {
   test("basic @font-face declaration", () => {
@@ -136,31 +161,7 @@ describe("css properties", () => {
 
 describe("font variation settings", () => {
   test("sets variation settings per axis", () => {
-    const fontData = {
-      name: "My font",
-      data: {
-        axes: [
-          {
-            axis: "wdth",
-            name: "Width",
-            min: 50,
-            max: 200,
-            default: 100
-          },
-          {
-            axis: "wght",
-            name: "Weight",
-            min: 0,
-            max: 1000,
-            default: 0
-          }
-        ],
-        charset: [],
-        instances: []
-      }
-    };
-
-    const css = buildFontVariationSettings(fontData).toString();
+    const css = buildFontVariationSettings(fontDataFixture).toString();
 
     expect(css).toEqual(stripIndent`
       *, *::before, *::after {
@@ -193,32 +194,8 @@ describe("body rule", () => {
 
 describe("stylesheet", () => {
   test("includes body, css properties, font varation and @font-face", () => {
-    const fontData = {
-      name: "My font",
-      data: {
-        axes: [
-          {
-            axis: "wdth",
-            name: "Width",
-            min: 50,
-            max: 200,
-            default: 100
-          },
-          {
-            axis: "wght",
-            name: "Weight",
-            min: 0,
-            max: 1000,
-            default: 0
-          }
-        ],
-        charset: [],
-        instances: []
-      }
-    };
-
     const css = buildStylesheet(
-      fontData,
+      fontDataFixture,
       "./test/__fixtures__/Fraunces-VF.ttf"
     ).toString();
 
@@ -239,6 +216,15 @@ describe("stylesheet", () => {
       *, *::before, *::after {
           font-variation-settings: "wdth" var(--wdth),"wght" var(--wght)
       }
+    `);
+  });
+});
+
+describe("buildFontJs", () => {
+  test("exports font name", () => {
+    const js = buildFontJs(fontDataFixture);
+    expect(js).toEqual(stripIndent`
+      export const fontName = "${fontDataFixture.name}";
     `);
   });
 });

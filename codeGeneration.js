@@ -131,9 +131,14 @@ const buildStylesheet = (fontData, relativeFontPath) => {
   return root;
 };
 
+const buildFontJs = fontData => {
+  return `export const fontName = "${fontData.name}";`;
+};
+
 module.exports.buildFontFace = buildFontFace;
 module.exports.buildProperties = buildProperties;
 module.exports.buildFontVariationSettings = buildFontVariationSettings;
 module.exports.buildBodyRule = buildBodyRule;
 module.exports.buildStylesheet = buildStylesheet;
 module.exports.PrettyStringifier = PrettyStringifier;
+module.exports.buildFontJs = buildFontJs;

@@ -1,6 +1,7 @@
 const path = require("path");
 const lib = require("./index");
 const fontData = require("./fontData");
+const codeGeneration = require("./codeGeneration");
 
 const fixtureFontPath = path.resolve(
   __dirname,
@@ -24,5 +25,15 @@ describe("buildStylesheet", () => {
 
     const stylesheet = lib.buildStylesheet(fontData);
     expect(typeof stylesheet).toEqual("string");
+  });
+});
+
+describe("buildFontJs", () => {
+  test("delegates to codeGeneration.buildFontJs", async () => {
+    const fontData = await lib.parseFontFile(fixtureFontPath);
+
+    expect(lib.buildFontJs(fontData)).toEqual(
+      codeGeneration.buildFontJs(fontData)
+    );
   });
 });
