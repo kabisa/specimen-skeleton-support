@@ -1,6 +1,5 @@
 const path = require("path");
-const test = require("ava");
-const { parseFontFile, buildCssFontFace } = require("./fontData");
+const { parseFontFile } = require("./fontData");
 
 const fixtureFontPath = path.resolve(
   __dirname,
@@ -9,10 +8,10 @@ const fixtureFontPath = path.resolve(
   "Fraunces-VF.ttf"
 );
 
-test("Extracts axes", async t => {
+test("Extracts axes", async () => {
   const fontData = await parseFontFile(fixtureFontPath);
 
-  t.deepEqual(fontData.data.axes, [
+  expect(fontData.data.axes).toEqual([
     {
       axis: "opsz",
       name: "Optical Size",
@@ -37,10 +36,10 @@ test("Extracts axes", async t => {
   ]);
 });
 
-test("Extracts charset", async t => {
+test("Extracts charset", async () => {
   const fontData = await parseFontFile(fixtureFontPath);
 
-  t.deepEqual(fontData.data.charset, [
+  expect(fontData.data.charset).toEqual([
     "&#32;",
     "&#33;",
     "&#34;",
@@ -142,10 +141,10 @@ test("Extracts charset", async t => {
   ]);
 });
 
-test("Extracts instances", async t => {
+test("Extracts instances", async () => {
   const fontData = await parseFontFile(fixtureFontPath);
 
-  t.deepEqual(fontData.data.instances, [
+  expect(fontData.data.instances).toEqual([
     {
       name: "Black OpMax",
       axes: {
@@ -291,91 +290,4 @@ test("Extracts instances", async t => {
       }
     }
   ]);
-});
-
-test("builds basic css @font-face declaration", t => {
-  const fontData = {
-    name: "My font",
-    data: {
-      axes: [],
-      charset: [],
-      instances: []
-    }
-  };
-
-  const fontFace = buildCssFontFace(
-    fontData,
-    "./test/__fixtures__/Fraunces-VF.ttf"
-  );
-  t.deepEqual(
-    fontFace,
-    "@font-face {\n" +
-      "  font-family: My font;\n" +
-      '  src: url("./test/__fixtures__/Fraunces-VF.ttf");\n' +
-      "}"
-  );
-});
-
-test("includes font-weight in @font-face declaration if wght axis present", t => {
-  const fontData = {
-    name: "My font",
-    data: {
-      axes: [
-        {
-          axis: "wght",
-          name: "Weight",
-          min: 0,
-          max: 1000,
-          default: 0
-        }
-      ],
-      charset: [],
-      instances: []
-    }
-  };
-
-  const fontFace = buildCssFontFace(
-    fontData,
-    "./test/__fixtures__/Fraunces-VF.ttf"
-  );
-  t.deepEqual(
-    fontFace,
-    "@font-face {\n" +
-      "  font-family: My font;\n" +
-      "  font-weight: 1 1000;\n" +
-      '  src: url("./test/__fixtures__/Fraunces-VF.ttf");\n' +
-      "}"
-  );
-});
-
-test("includes font-stretch in @font-face declaration if wdth axis present", t => {
-  const fontData = {
-    name: "My font",
-    data: {
-      axes: [
-        {
-          axis: "wdth",
-          name: "Width",
-          min: 50,
-          max: 200,
-          default: 100
-        }
-      ],
-      charset: [],
-      instances: []
-    }
-  };
-
-  const fontFace = buildCssFontFace(
-    fontData,
-    "./test/__fixtures__/Fraunces-VF.ttf"
-  );
-  t.deepEqual(
-    fontFace,
-    "@font-face {\n" +
-      "  font-family: My font;\n" +
-      "  font-stretch: 50 200;\n" +
-      '  src: url("./test/__fixtures__/Fraunces-VF.ttf");\n' +
-      "}"
-  );
 });
