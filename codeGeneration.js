@@ -1,6 +1,17 @@
 const postcss = require("postcss");
 const Stringifier = require("postcss/lib/stringifier");
 
+const selectorify = text => {
+  return (
+    "." +
+    text
+      .toLowerCase()
+      .replace(/ /g, "-")
+      .replace(/[-]+/g, "-")
+      .replace(/[^\w-]+/g, "")
+  );
+};
+
 /**
  * Custom PostCSS Stringifier that 'pretty prints' CSS.
  * Currently it only applies spacing between rules.
@@ -78,8 +89,10 @@ const buildFontFace = (fontData, relativeFontPath) => {
   return fontFace;
 };
 
-const buildProperties = fontData => {
-  const rule = postcss.rule({ selector: ":root" });
+const buildVarationVariables = fontData => {
+  const selector = selectorify(fontData.name);
+
+  const rule = postcss.rule({ selector: selector });
 
   const properties = fontData.data.axes.map(axis => {
     return postcss.decl({
@@ -92,25 +105,38 @@ const buildProperties = fontData => {
   return rule;
 };
 
-const buildFontVariationSettings = fontData => {
-  const rule = postcss.rule({ selector: "*, *::before, *::after" });
+const buildVariationStyles = fontData => {
+  const selector = selectorify(fontData.name);
+
+  const rule = postcss.rule({
+    selector: `${selector},\n${selector} *,\n${selector} *::before,\n${selector} *::after`
+  });
 
   const varationSettings = fontData.data.axes.map(axis => {
     return `"${axis.axis}" var(--${axis.axis})`;
   });
 
-  const fontVariationSettings = postcss.decl({
-    prop: "font-variation-settings",
-    value: varationSettings
-  });
+  rule.append(
+    postcss.decl({
+      prop: "font-family",
+      value: `"${fontData.name}", monospace`
+    })
+  );
 
-  rule.append(fontVariationSettings);
+  rule.append(
+    postcss.decl({
+      prop: "font-variation-settings",
+      value: varationSettings
+    })
+  );
 
   return rule;
 };
 
-const buildBodyRule = fontData => {
-  const rule = postcss.rule({ selector: "body" });
+const buildStyles = fontData => {
+  const selector = selectorify(fontData.name);
+
+  const rule = postcss.rule({ selector: selector });
 
   rule.append(
     postcss.decl({
@@ -125,24 +151,26 @@ const buildBodyRule = fontData => {
 const buildStylesheet = (fontData, relativeFontPath) => {
   const root = postcss.root();
 
-  root.append([
-    buildFontFace(fontData, relativeFontPath),
-    buildBodyRule(fontData),
-    buildProperties(fontData),
-    buildFontVariationSettings(fontData)
-  ]);
+  root.append(buildFontFace(fontData, relativeFontPath));
+
+  if (fontData.data.axes.length) {
+    root.append(buildVarationVariables(fontData));
+    root.append(buildVariationStyles(fontData));
+  } else {
+    root.append(buildStyles(fontData));
+  }
 
   return root;
 };
 
 const buildFontJs = fontData => {
-  return `export const fontName = "${fontData.name}";`;
+  return `fontNames.push("${fontData.name}");\n`;
 };
 
 module.exports.buildFontFace = buildFontFace;
-module.exports.buildProperties = buildProperties;
-module.exports.buildFontVariationSettings = buildFontVariationSettings;
-module.exports.buildBodyRule = buildBodyRule;
+module.exports.buildVarationVariables = buildVarationVariables;
+module.exports.buildVariationStyles = buildVariationStyles;
+module.exports.buildStyles = buildStyles;
 module.exports.buildStylesheet = buildStylesheet;
 module.exports.PrettyStringifier = PrettyStringifier;
 module.exports.buildFontJs = buildFontJs;
