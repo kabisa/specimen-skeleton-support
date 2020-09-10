@@ -133,7 +133,7 @@ const buildVariationStyles = fontData => {
   return rule;
 };
 
-const buildStyles = fontData => {
+const buildRegularStyles = fontData => {
   const selector = selectorify(fontData.name);
 
   const rule = postcss.rule({ selector: selector });
@@ -157,7 +157,7 @@ const buildStylesheet = (fontData, relativeFontPath) => {
     root.append(buildVarationVariables(fontData));
     root.append(buildVariationStyles(fontData));
   } else {
-    root.append(buildStyles(fontData));
+    root.append(buildRegularStyles(fontData));
   }
 
   return root;
@@ -170,7 +170,7 @@ const buildFontJs = fontData => {
 module.exports.buildFontFace = buildFontFace;
 module.exports.buildVarationVariables = buildVarationVariables;
 module.exports.buildVariationStyles = buildVariationStyles;
-module.exports.buildStyles = buildStyles;
+module.exports.buildRegularStyles = buildRegularStyles;
 module.exports.buildStylesheet = buildStylesheet;
 module.exports.PrettyStringifier = PrettyStringifier;
 module.exports.buildFontJs = buildFontJs;
