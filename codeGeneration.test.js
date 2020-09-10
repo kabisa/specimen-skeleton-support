@@ -5,7 +5,8 @@ const {
   buildVarationVariables,
   buildVariationStyles,
   buildStylesheet,
-  buildFontJs
+  buildFontJs,
+  buildRegularStyles
 } = require("./codeGeneration");
 
 const fontDataFixture = {
@@ -198,6 +199,18 @@ describe("stylesheet", () => {
       .my-font *::after {
           font-family: "My font", monospace;
           font-variation-settings: "wdth" var(--wdth),"wght" var(--wght)
+      }
+    `);
+  });
+});
+
+describe("regular font", () => {
+  test("regular font CSS for non-variable font", () => {
+    const css = buildRegularStyles(fontDataFixture).toString();
+
+    expect(css).toEqual(stripIndent`
+      .my-font {
+          font-family: "My font", monospace;
       }
     `);
   });

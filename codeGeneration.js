@@ -119,7 +119,7 @@ const buildVariationStyles = fontData => {
   rule.append(
     postcss.decl({
       prop: "font-family",
-      value: `"${fontData.name}", monospace`
+      value: `"${fontData.name}", monospace;`
     })
   );
 
@@ -141,7 +141,7 @@ const buildRegularStyles = fontData => {
   rule.append(
     postcss.decl({
       prop: "font-family",
-      value: `"${fontData.name}", monospace`
+      value: `"${fontData.name}", monospace;`
     })
   );
 
