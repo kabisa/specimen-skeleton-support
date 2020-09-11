@@ -36,5 +36,6 @@ const buildFontJs = fontData => {
 module.exports = {
   parseFontFile,
   buildStylesheet,
-  buildFontJs
+  buildFontJs,
+  getSelector: codeGeneration.getSelector
 };

@@ -1,17 +1,6 @@
 const postcss = require("postcss");
 const Stringifier = require("postcss/lib/stringifier");
 
-const selectorify = text => {
-  return (
-    "." +
-    text
-      .toLowerCase()
-      .replace(/ /g, "-")
-      .replace(/[-]+/g, "-")
-      .replace(/[^\w-]+/g, "")
-  );
-};
-
 /**
  * Custom PostCSS Stringifier that 'pretty prints' CSS.
  * Currently it only applies spacing between rules.
@@ -90,9 +79,7 @@ const buildFontFace = (fontData, relativeFontPath) => {
 };
 
 const buildVarationVariables = fontData => {
-  const selector = selectorify(fontData.name);
-
-  const rule = postcss.rule({ selector: selector });
+  const rule = postcss.rule({ selector: getSelector(fontData) });
 
   const properties = fontData.data.axes.map(axis => {
     return postcss.decl({
@@ -106,7 +93,7 @@ const buildVarationVariables = fontData => {
 };
 
 const buildVariationStyles = fontData => {
-  const selector = selectorify(fontData.name);
+  const selector = getSelector(fontData);
 
   const rule = postcss.rule({
     selector: `${selector},\n${selector} *,\n${selector} *::before,\n${selector} *::after`
@@ -119,7 +106,7 @@ const buildVariationStyles = fontData => {
   rule.append(
     postcss.decl({
       prop: "font-family",
-      value: `"${fontData.name}", monospace;`
+      value: `"${fontData.name}", monospace`
     })
   );
 
@@ -134,14 +121,12 @@ const buildVariationStyles = fontData => {
 };
 
 const buildRegularStyles = fontData => {
-  const selector = selectorify(fontData.name);
-
-  const rule = postcss.rule({ selector: selector });
+  const rule = postcss.rule({ selector: getSelector(fontData) });
 
   rule.append(
     postcss.decl({
       prop: "font-family",
-      value: `"${fontData.name}", monospace;`
+      value: `"${fontData.name}", monospace`
     })
   );
 
@@ -167,6 +152,16 @@ const buildFontJs = fontData => {
   return `fontNames.push("${fontData.name}");\n`;
 };
 
+const getSelector = (fontData, htmlClass) => {
+  let selector = htmlClass ? "" : ".";
+  selector += fontData.name
+    .toLowerCase()
+    .replace(/ /g, "-")
+    .replace(/[-]+/g, "-")
+    .replace(/[^\w-]+/g, "");
+  return selector;
+};
+
 module.exports.buildFontFace = buildFontFace;
 module.exports.buildVarationVariables = buildVarationVariables;
 module.exports.buildVariationStyles = buildVariationStyles;
@@ -174,3 +169,4 @@ module.exports.buildRegularStyles = buildRegularStyles;
 module.exports.buildStylesheet = buildStylesheet;
 module.exports.PrettyStringifier = PrettyStringifier;
 module.exports.buildFontJs = buildFontJs;
+module.exports.getSelector = getSelector;

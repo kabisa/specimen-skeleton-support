@@ -9,7 +9,7 @@ const {
   buildRegularStyles
 } = require("./codeGeneration");
 
-const fontDataFixture = {
+const variableFontDataFixture = {
   name: "My font",
   data: {
     axes: [
@@ -28,6 +28,15 @@ const fontDataFixture = {
         default: 0
       }
     ],
+    charset: [],
+    instances: []
+  }
+};
+
+const regularFontDataFixture = {
+  name: "My font",
+  data: {
+    axes: [],
     charset: [],
     instances: []
   }
@@ -161,7 +170,7 @@ describe("css properties", () => {
 
 describe("font variation settings", () => {
   test("sets variation settings per axis", () => {
-    const css = buildVariationStyles(fontDataFixture).toString();
+    const css = buildVariationStyles(variableFontDataFixture).toString();
 
     expect(css).toEqual(stripIndent`
       .my-font,
@@ -178,7 +187,7 @@ describe("font variation settings", () => {
 describe("stylesheet", () => {
   test("includes body, css properties, font varation and @font-face", () => {
     const css = buildStylesheet(
-      fontDataFixture,
+      variableFontDataFixture,
       "./test/__fixtures__/Fraunces-VF.ttf"
     ).toString();
 
@@ -206,11 +215,11 @@ describe("stylesheet", () => {
 
 describe("regular font", () => {
   test("regular font CSS for non-variable font", () => {
-    const css = buildRegularStyles(fontDataFixture).toString();
+    const css = buildRegularStyles(regularFontDataFixture).toString();
 
     expect(css).toEqual(stripIndent`
       .my-font {
-          font-family: "My font", monospace;
+          font-family: "My font", monospace
       }
     `);
   });
@@ -218,7 +227,7 @@ describe("regular font", () => {
 
 describe("buildFontJs", () => {
   test("exports font name", () => {
-    const js = buildFontJs(fontDataFixture);
-    expect(js).toEqual(`fontNames.push("${fontDataFixture.name}");\n`);
+    const js = buildFontJs(variableFontDataFixture);
+    expect(js).toEqual(`fontNames.push("${variableFontDataFixture.name}");\n`);
   });
 });
