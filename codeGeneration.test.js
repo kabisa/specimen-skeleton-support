@@ -2,14 +2,14 @@ const { stripIndent } = require("common-tags");
 
 const {
   buildFontFace,
-  buildProperties,
-  buildFontVariationSettings,
-  buildBodyRule,
+  buildVarationVariables,
+  buildVariationStyles,
   buildStylesheet,
-  buildFontJs
+  buildFontJs,
+  buildRegularStyles
 } = require("./codeGeneration");
 
-const fontDataFixture = {
+const variableFontDataFixture = {
   name: "My font",
   data: {
     axes: [
@@ -28,6 +28,15 @@ const fontDataFixture = {
         default: 0
       }
     ],
+    charset: [],
+    instances: []
+  }
+};
+
+const regularFontDataFixture = {
+  name: "My font",
+  data: {
+    axes: [],
     charset: [],
     instances: []
   }
@@ -148,10 +157,10 @@ describe("css properties", () => {
       }
     };
 
-    const rootDecl = buildProperties(fontData).toString();
+    const rootDecl = buildVarationVariables(fontData).toString();
 
     expect(rootDecl).toEqual(stripIndent`
-      :root {
+      .my-font {
           --wdth: 100;
           --wght: 0
       }
@@ -161,32 +170,15 @@ describe("css properties", () => {
 
 describe("font variation settings", () => {
   test("sets variation settings per axis", () => {
-    const css = buildFontVariationSettings(fontDataFixture).toString();
+    const css = buildVariationStyles(variableFontDataFixture).toString();
 
     expect(css).toEqual(stripIndent`
-      *, *::before, *::after {
+      .my-font,
+      .my-font *,
+      .my-font *::before,
+      .my-font *::after {
+          font-family: "My font", monospace;
           font-variation-settings: "wdth" var(--wdth),"wght" var(--wght)
-      }
-    `);
-  });
-});
-
-describe("body rule", () => {
-  test("builds body rule with font familiy", () => {
-    const fontData = {
-      name: "My Font",
-      data: {
-        axes: [],
-        charset: [],
-        instances: []
-      }
-    };
-
-    const css = buildBodyRule(fontData).toString();
-
-    expect(css).toEqual(stripIndent`
-      body {
-          font-family: "My Font", monospace
       }
     `);
   });
@@ -195,7 +187,7 @@ describe("body rule", () => {
 describe("stylesheet", () => {
   test("includes body, css properties, font varation and @font-face", () => {
     const css = buildStylesheet(
-      fontDataFixture,
+      variableFontDataFixture,
       "./test/__fixtures__/Fraunces-VF.ttf"
     ).toString();
 
@@ -206,15 +198,28 @@ describe("stylesheet", () => {
           font-weight: 1 1000;
           font-stretch: 50 200
       }
-      body {
-          font-family: "My font", monospace
-      }
-      :root {
+      .my-font {
           --wdth: 100;
           --wght: 0
       }
-      *, *::before, *::after {
+      .my-font,
+      .my-font *,
+      .my-font *::before,
+      .my-font *::after {
+          font-family: "My font", monospace;
           font-variation-settings: "wdth" var(--wdth),"wght" var(--wght)
+      }
+    `);
+  });
+});
+
+describe("regular font", () => {
+  test("regular font CSS for non-variable font", () => {
+    const css = buildRegularStyles(regularFontDataFixture).toString();
+
+    expect(css).toEqual(stripIndent`
+      .my-font {
+          font-family: "My font", monospace
       }
     `);
   });
@@ -222,9 +227,7 @@ describe("stylesheet", () => {
 
 describe("buildFontJs", () => {
   test("exports font name", () => {
-    const js = buildFontJs(fontDataFixture);
-    expect(js).toEqual(stripIndent`
-      export const fontName = "${fontDataFixture.name}";
-    `);
+    const js = buildFontJs(variableFontDataFixture);
+    expect(js).toEqual(`fontNames.push("${variableFontDataFixture.name}");\n`);
   });
 });

@@ -78,8 +78,8 @@ const buildFontFace = (fontData, relativeFontPath) => {
   return fontFace;
 };
 
-const buildProperties = fontData => {
-  const rule = postcss.rule({ selector: ":root" });
+const buildVarationVariables = fontData => {
+  const rule = postcss.rule({ selector: getSelector(fontData) });
 
   const properties = fontData.data.axes.map(axis => {
     return postcss.decl({
@@ -92,25 +92,36 @@ const buildProperties = fontData => {
   return rule;
 };
 
-const buildFontVariationSettings = fontData => {
-  const rule = postcss.rule({ selector: "*, *::before, *::after" });
+const buildVariationStyles = fontData => {
+  const selector = getSelector(fontData);
+
+  const rule = postcss.rule({
+    selector: `${selector},\n${selector} *,\n${selector} *::before,\n${selector} *::after`
+  });
 
   const varationSettings = fontData.data.axes.map(axis => {
     return `"${axis.axis}" var(--${axis.axis})`;
   });
 
-  const fontVariationSettings = postcss.decl({
-    prop: "font-variation-settings",
-    value: varationSettings
-  });
+  rule.append(
+    postcss.decl({
+      prop: "font-family",
+      value: `"${fontData.name}", monospace`
+    })
+  );
 
-  rule.append(fontVariationSettings);
+  rule.append(
+    postcss.decl({
+      prop: "font-variation-settings",
+      value: varationSettings
+    })
+  );
 
   return rule;
 };
 
-const buildBodyRule = fontData => {
-  const rule = postcss.rule({ selector: "body" });
+const buildRegularStyles = fontData => {
+  const rule = postcss.rule({ selector: getSelector(fontData) });
 
   rule.append(
     postcss.decl({
@@ -125,24 +136,37 @@ const buildBodyRule = fontData => {
 const buildStylesheet = (fontData, relativeFontPath) => {
   const root = postcss.root();
 
-  root.append([
-    buildFontFace(fontData, relativeFontPath),
-    buildBodyRule(fontData),
-    buildProperties(fontData),
-    buildFontVariationSettings(fontData)
-  ]);
+  root.append(buildFontFace(fontData, relativeFontPath));
+
+  if (fontData.data.axes.length) {
+    root.append(buildVarationVariables(fontData));
+    root.append(buildVariationStyles(fontData));
+  } else {
+    root.append(buildRegularStyles(fontData));
+  }
 
   return root;
 };
 
 const buildFontJs = fontData => {
-  return `export const fontName = "${fontData.name}";`;
+  return `fontNames.push("${fontData.name}");\n`;
+};
+
+const getSelector = (fontData, htmlClass) => {
+  let selector = htmlClass ? "" : ".";
+  selector += fontData.name
+    .toLowerCase()
+    .replace(/ /g, "-")
+    .replace(/[-]+/g, "-")
+    .replace(/[^\w-]+/g, "");
+  return selector;
 };
 
 module.exports.buildFontFace = buildFontFace;
-module.exports.buildProperties = buildProperties;
-module.exports.buildFontVariationSettings = buildFontVariationSettings;
-module.exports.buildBodyRule = buildBodyRule;
+module.exports.buildVarationVariables = buildVarationVariables;
+module.exports.buildVariationStyles = buildVariationStyles;
+module.exports.buildRegularStyles = buildRegularStyles;
 module.exports.buildStylesheet = buildStylesheet;
 module.exports.PrettyStringifier = PrettyStringifier;
 module.exports.buildFontJs = buildFontJs;
+module.exports.getSelector = getSelector;

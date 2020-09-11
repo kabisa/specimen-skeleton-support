@@ -33,18 +33,18 @@ describe("buildStylesheet", () => {
           src: url("undefined");
           font-weight: 1 1000;
       }
-      
-      body {
-          font-family: "Fraunces-LightOpMin", monospace;
-      }
-      
-      :root {
+
+      .fraunces-lightopmin {
           --opsz: 9;
           --wght: 0;
           --WONK: 0.5;
       }
-      
-      *, *::before, *::after {
+
+      .fraunces-lightopmin,
+      .fraunces-lightopmin *,
+      .fraunces-lightopmin *::before,
+      .fraunces-lightopmin *::after {
+          font-family: "Fraunces-LightOpMin", monospace;
           font-variation-settings: "opsz" var(--opsz),"wght" var(--wght),"WONK" var(--WONK);
       }
     `);
