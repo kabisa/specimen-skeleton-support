@@ -13,9 +13,102 @@ const buildAxes = font => {
 };
 
 const buildChars = font => {
-  return glyphData.filter(g =>
-    font.characterSet.includes(parseInt(g.unicode, 16))
-  );
+  // undefined = no subcategory
+  const categories = {
+    Letter: [
+      undefined,
+      "Uppercase",
+      "Lowercase",
+      "Superscript",
+      "Modifier",
+      "Ligature",
+      "Halfform",
+      "Matra",
+      "Spacing",
+      "Jamo",
+      "Syllable",
+      "Number"
+    ],
+    Number: [
+      undefined,
+      "Decimal Digit",
+      "Small",
+      "Fraction",
+      "Spacing",
+      "Letter"
+    ],
+    Punctuation: [
+      undefined,
+      "Quote",
+      "Parenthesis",
+      "Dash",
+      "Spacing",
+      "Modifier"
+    ],
+    Symbol: [
+      undefined,
+      "Currency",
+      "Math",
+      "Modifier",
+      "Superscript",
+      "Format",
+      "Ligature",
+      "Spacing",
+      "Arrow",
+      "Geometry"
+    ],
+    Separator: [undefined, "Space", "Format", "Nonspace"],
+    Mark: [
+      undefined,
+      "Modifier",
+      "Spacing",
+      "Nonspacing",
+      "Enclosing",
+      "Spacing Combining",
+      "Ligature"
+    ],
+    Other: [undefined, "Format"]
+  };
+
+  let charset = {};
+  for (const category in categories) {
+    for (const subCategory of categories[category]) {
+      let scripts = new Set();
+      const subcatScripts = glyphData.filter(
+        f => f.category === category && f.subCategory === subCategory
+      );
+      subcatScripts.map(sc => {
+        scripts.add(sc.script);
+      });
+
+      if (!charset[category]) {
+        charset[category] = {};
+      }
+      if (!charset[category][subCategory]) {
+        charset[category][subCategory] = {};
+      }
+
+      for (const script of scripts) {
+        const chars = glyphData.filter(
+          f =>
+            f.category === category &&
+            f.subCategory === subCategory &&
+            f.script === script
+        );
+
+        const presentChars = chars.filter(g =>
+          font.characterSet.includes(parseInt(g.unicode, 16))
+        );
+
+        // We only need the unicode values
+        charset[category][subCategory][script] = presentChars.map(g => {
+          return g.unicode;
+        });
+      }
+    }
+  }
+
+  return charset;
 };
 
 const buildInstances = font => {
