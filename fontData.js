@@ -1,4 +1,5 @@
 const util = require("util");
+const glyphData = require("./GlyphData.json");
 const loadFont = util.promisify(require("fontkit").open);
 
 const buildAxes = font => {
@@ -12,7 +13,9 @@ const buildAxes = font => {
 };
 
 const buildChars = font => {
-  return font.characterSet.map(code => `&#${code};`);
+  return glyphData.filter(g =>
+    font.characterSet.includes(parseInt(g.unicode, 16))
+  );
 };
 
 const buildInstances = font => {
