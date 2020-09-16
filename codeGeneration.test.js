@@ -11,6 +11,7 @@ const {
 
 const variableFontDataFixture = {
   name: "My font",
+  class: "my-font",
   data: {
     axes: [
       {
@@ -228,6 +229,8 @@ describe("regular font", () => {
 describe("buildFontJs", () => {
   test("exports font name", () => {
     const js = buildFontJs(variableFontDataFixture);
-    expect(js).toEqual(`fontNames.push("${variableFontDataFixture.name}");\n`);
+    expect(js).toEqual(
+      `fontNames.push({name:"${variableFontDataFixture.name}",class:"${variableFontDataFixture.class}"});\n`
+    );
   });
 });
