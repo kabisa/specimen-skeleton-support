@@ -149,7 +149,10 @@ const buildStylesheet = (fontData, relativeFontPath) => {
 };
 
 const buildFontJs = fontData => {
-  return `fontNames.push("${fontData.name}");\n`;
+  return `fontNames.push({name: "${fontData.name}",class:"${getSelector(
+    fontData,
+    true
+  )}"});\n`;
 };
 
 const getSelector = (fontData, htmlClass) => {
