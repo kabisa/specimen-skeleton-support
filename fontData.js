@@ -73,6 +73,7 @@ const buildChars = font => {
   let charset = {};
   for (const category in categories) {
     for (const subCategory of categories[category]) {
+      // Get all scripts in this subcategory
       let scripts = new Set();
       const subcatScripts = glyphData.filter(
         f => f.category === category && f.subCategory === subCategory
@@ -81,13 +82,7 @@ const buildChars = font => {
         scripts.add(sc.script);
       });
 
-      if (!charset[category]) {
-        charset[category] = {};
-      }
-      if (!charset[category][subCategory]) {
-        charset[category][subCategory] = {};
-      }
-
+      // Loop over each script and see which chars are in the font
       for (const script of scripts) {
         const chars = glyphData.filter(
           f =>
@@ -96,14 +91,24 @@ const buildChars = font => {
             f.script === script
         );
 
+        // Which chars are in the font?
         const presentChars = chars.filter(g =>
           font.characterSet.includes(parseInt(g.unicode, 16))
         );
 
         // We only need the unicode values
-        charset[category][subCategory][script] = presentChars.map(g => {
+        const scriptChars = presentChars.map(g => {
           return g.unicode;
         });
+        if (scriptChars.length !== 0) {
+          if (!charset[category]) {
+            charset[category] = {};
+          }
+          if (!charset[category][subCategory]) {
+            charset[category][subCategory] = {};
+          }
+          charset[category][subCategory][script] = scriptChars;
+        }
       }
     }
   }
