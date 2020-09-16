@@ -230,7 +230,7 @@ describe("buildFontJs", () => {
   test("exports font name", () => {
     const js = buildFontJs(variableFontDataFixture);
     expect(js).toEqual(
-      `fontNames.push({name:"${variableFontDataFixture.name}",class:"${variableFontDataFixture.class}"});\n`
+      `fontData.push({name:"${variableFontDataFixture.name}",class:"${variableFontDataFixture.class}"});\n`
     );
   });
 });
