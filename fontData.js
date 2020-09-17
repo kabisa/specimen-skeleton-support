@@ -70,7 +70,7 @@ const buildChars = font => {
     Other: [undefined, "Format"]
   };
 
-  let charset = {};
+  let charset = [];
   for (const category in categories) {
     for (const subCategory of categories[category]) {
       // Get all scripts in this subcategory
@@ -97,17 +97,26 @@ const buildChars = font => {
         );
 
         // We only need the unicode values
-        const scriptChars = presentChars.map(g => {
-          return g.unicode;
-        });
+        const scriptChars = presentChars.map(g => g.unicode);
+
         if (scriptChars.length !== 0) {
-          if (!charset[category]) {
-            charset[category] = {};
+          const subCharset = {
+            category: category,
+            subCategory: subCategory || null,
+            script: script || null,
+            chars: scriptChars || null
+          };
+
+          if (
+            charset.find(
+              c =>
+                c.category == subCharset.category &&
+                c.subCategory == subCharset.subCategory &&
+                c.script == subCharset.script
+            ) === undefined
+          ) {
+            charset.push(subCharset);
           }
-          if (!charset[category][subCategory]) {
-            charset[category][subCategory] = {};
-          }
-          charset[category][subCategory][script] = scriptChars;
         }
       }
     }
