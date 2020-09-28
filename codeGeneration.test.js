@@ -5,7 +5,6 @@ const {
   buildVarationVariables,
   buildVariationStyles,
   buildStylesheet,
-  buildFontJs,
   buildRegularStyles
 } = require("./codeGeneration");
 
@@ -223,14 +222,5 @@ describe("regular font", () => {
           font-family: "My font", monospace
       }
     `);
-  });
-});
-
-describe("buildFontJs", () => {
-  test("exports font name", () => {
-    const js = buildFontJs(variableFontDataFixture);
-    expect(js).toEqual(
-      `fontData.push({name:"${variableFontDataFixture.name}",class:"${variableFontDataFixture.class}"});\n`
-    );
   });
 });

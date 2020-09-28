@@ -25,17 +25,9 @@ const parseFontFile = async path => {
   return fontData.parseFontFile(path);
 };
 
-/**
- * Builds JS module for the provided fontData.
- * @param {fontData} fontData
- */
-const buildFontJs = fontData => {
-  return codeGeneration.buildFontJs(fontData);
-};
-
 module.exports = {
   parseFontFile,
   buildStylesheet,
-  buildFontJs,
-  getSelector: codeGeneration.getSelector
+  getSelector: codeGeneration.getSelector,
+  guessFontStyle: fontData.guessFontStyle
 };

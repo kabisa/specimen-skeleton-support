@@ -148,13 +148,6 @@ const buildStylesheet = (fontData, relativeFontPath) => {
   return root;
 };
 
-const buildFontJs = fontData => {
-  return `fontData.push({name:"${fontData.name}",class:"${getSelector(
-    fontData,
-    true
-  )}"});\n`;
-};
-
 const getSelector = (fontData, htmlClass) => {
   let selector = htmlClass ? "" : ".";
   selector += fontData.name
@@ -171,5 +164,4 @@ module.exports.buildVariationStyles = buildVariationStyles;
 module.exports.buildRegularStyles = buildRegularStyles;
 module.exports.buildStylesheet = buildStylesheet;
 module.exports.PrettyStringifier = PrettyStringifier;
-module.exports.buildFontJs = buildFontJs;
 module.exports.getSelector = getSelector;
