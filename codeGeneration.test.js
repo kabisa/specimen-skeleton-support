@@ -33,7 +33,7 @@ const variableFontDataFixture = {
   }
 };
 
-const regularFontDataFixture = {
+const staticFontDataFixture = {
   name: "My font",
   data: {
     axes: [],
@@ -215,7 +215,7 @@ describe("stylesheet", () => {
 
 describe("regular font", () => {
   test("regular font CSS for non-variable font", () => {
-    const css = buildRegularStyles(regularFontDataFixture).toString();
+    const css = buildRegularStyles(staticFontDataFixture).toString();
 
     expect(css).toEqual(stripIndent`
       .my-font {
