@@ -5,7 +5,6 @@ const {
   buildVarationVariables,
   buildVariationStyles,
   buildStylesheet,
-  buildFontJs,
   buildRegularStyles
 } = require("./codeGeneration");
 
@@ -34,7 +33,7 @@ const variableFontDataFixture = {
   }
 };
 
-const regularFontDataFixture = {
+const staticFontDataFixture = {
   name: "My font",
   data: {
     axes: [],
@@ -216,21 +215,12 @@ describe("stylesheet", () => {
 
 describe("regular font", () => {
   test("regular font CSS for non-variable font", () => {
-    const css = buildRegularStyles(regularFontDataFixture).toString();
+    const css = buildRegularStyles(staticFontDataFixture).toString();
 
     expect(css).toEqual(stripIndent`
       .my-font {
           font-family: "My font", monospace
       }
     `);
-  });
-});
-
-describe("buildFontJs", () => {
-  test("exports font name", () => {
-    const js = buildFontJs(variableFontDataFixture);
-    expect(js).toEqual(
-      `fontData.push({name:"${variableFontDataFixture.name}",class:"${variableFontDataFixture.class}"});\n`
-    );
   });
 });

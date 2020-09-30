@@ -3,7 +3,6 @@ const { stripIndent } = require("common-tags");
 
 const lib = require("./index");
 const fontData = require("./fontData");
-const codeGeneration = require("./codeGeneration");
 
 const fixtureFontPath = path.resolve(
   __dirname,
@@ -48,15 +47,5 @@ describe("buildStylesheet", () => {
           font-variation-settings: "opsz" var(--opsz),"wght" var(--wght),"WONK" var(--WONK);
       }
     `);
-  });
-});
-
-describe("buildFontJs", () => {
-  test("delegates to codeGeneration.buildFontJs", async () => {
-    const fontData = await lib.parseFontFile(fixtureFontPath);
-
-    expect(lib.buildFontJs(fontData)).toEqual(
-      codeGeneration.buildFontJs(fontData)
-    );
   });
 });

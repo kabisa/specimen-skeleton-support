@@ -12,6 +12,76 @@ const buildAxes = font => {
   }));
 };
 
+const guessFontStyle = fontName => {
+  const styles = [
+    "italic",
+    "thin",
+    "hairline",
+    "extra-light",
+    "extra light",
+    "extralight",
+    "ultra-light",
+    "ultra light",
+    "ultralight",
+    "light",
+    "normal",
+    "regular",
+    "medium",
+    "semi-bold",
+    "semi bold",
+    "semibold",
+    "demi-bold",
+    "demi bold",
+    "demibold",
+    "bold",
+    "extra-bold",
+    "extra bold",
+    "extrabold",
+    "ultra-bold",
+    "ultra bold",
+    "ultrabold",
+    "black",
+    "heavy",
+    "extra-black",
+    "extra black",
+    "extrablack",
+    "ultra-black",
+    "ultra black",
+    "ultrablack",
+    "ultra-condensed",
+    "ultra condensed",
+    "ultracondensed",
+    "extra-condensed",
+    "extra condensed",
+    "extracondensed",
+    "condensed",
+    "semi-condensed",
+    "semi condensed",
+    "semicondensed",
+    "normal",
+    "semi-expanded",
+    "semi expanded",
+    "semiexpanded",
+    "expanded",
+    "extra-expanded",
+    "extra expanded",
+    "extraexpanded",
+    "ultra-expanded",
+    "ultra expanded",
+    "ultraexpanded"
+  ];
+
+  const matches = styles.filter(style =>
+    fontName.toLowerCase().includes(style) ? style : false
+  );
+
+  if (matches.length) {
+    return matches.join(" ");
+  } else {
+    return "unknown";
+  }
+};
+
 const buildChars = font => {
   // undefined = no subcategory
   const categories = {
@@ -143,3 +213,5 @@ module.exports.parseFontFile = async path => {
     }
   };
 };
+
+module.exports.guessFontStyle = guessFontStyle;
