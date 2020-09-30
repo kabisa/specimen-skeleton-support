@@ -29,5 +29,5 @@ module.exports = {
   parseFontFile,
   buildStylesheet,
   getSelector: codeGeneration.getSelector,
-  guessFontStyle: fontData.guessFontStyle
+  suggestFontStyle: fontData.suggestFontStyle
 };

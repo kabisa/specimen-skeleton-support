@@ -12,7 +12,7 @@ const buildAxes = font => {
   }));
 };
 
-const guessFontStyle = fontName => {
+const suggestFontStyle = fontName => {
   const styles = [
     "italic",
     "thin",
@@ -72,10 +72,10 @@ const guessFontStyle = fontName => {
   ];
 
   const matches = styles.filter(style =>
-    fontName.toLowerCase().includes(style) ? style : false
+    fontName.toLowerCase().includes(style)
   );
 
-  if (matches.length) {
+  if (matches.length > 0) {
     return matches.join(" ");
   } else {
     return "unknown";
@@ -204,6 +204,7 @@ const buildInstances = font => {
 
 module.exports.parseFontFile = async path => {
   const font = await loadFont(path);
+
   return {
     name: font.postscriptName,
     data: {
@@ -214,4 +215,4 @@ module.exports.parseFontFile = async path => {
   };
 };
 
-module.exports.guessFontStyle = guessFontStyle;
+module.exports.suggestFontStyle = suggestFontStyle;

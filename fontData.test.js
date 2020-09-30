@@ -1,5 +1,5 @@
 const path = require("path");
-const { parseFontFile, guessFontStyle } = require("./fontData");
+const { parseFontFile, suggestFontStyle } = require("./fontData");
 
 const fixtureFontPath = path.resolve(
   __dirname,
@@ -338,10 +338,10 @@ test("Extracts instances", async () => {
 
 describe("Guess font style", () => {
   test("guesses the weight of the font", () => {
-    expect(guessFontStyle("My font Bold")).toEqual("bold");
+    expect(suggestFontStyle("My font Bold")).toEqual("bold");
   });
 
   test("handles fonts without guessable style", () => {
-    expect(guessFontStyle("My font")).toEqual("unknown");
+    expect(suggestFontStyle("My font")).toEqual("unknown");
   });
 });
