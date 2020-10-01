@@ -106,7 +106,7 @@ const buildVariationStyles = fontData => {
   rule.append(
     postcss.decl({
       prop: "font-family",
-      value: `"${fontData.name}", monospace`
+      value: `"${fontData.name}", var(--specimen-fallback-font, monospace), monospace`
     })
   );
 
@@ -126,7 +126,7 @@ const buildRegularStyles = fontData => {
   rule.append(
     postcss.decl({
       prop: "font-family",
-      value: `"${fontData.name}", monospace`
+      value: `"${fontData.name}", var(--specimen-fallback-font, monospace), monospace`
     })
   );
 
