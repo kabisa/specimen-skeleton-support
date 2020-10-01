@@ -43,7 +43,7 @@ describe("buildStylesheet", () => {
       .fraunces-lightopmin *,
       .fraunces-lightopmin *::before,
       .fraunces-lightopmin *::after {
-          font-family: "Fraunces-LightOpMin", monospace;
+          font-family: "Fraunces-LightOpMin", var(--specimen-fallback-font, monospace), monospace;
           font-variation-settings: "opsz" var(--opsz),"wght" var(--wght),"WONK" var(--WONK);
       }
     `);

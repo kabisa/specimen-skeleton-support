@@ -177,7 +177,7 @@ describe("font variation settings", () => {
       .my-font *,
       .my-font *::before,
       .my-font *::after {
-          font-family: "My font", monospace;
+          font-family: "My font", var(--specimen-fallback-font, monospace), monospace;
           font-variation-settings: "wdth" var(--wdth),"wght" var(--wght)
       }
     `);
@@ -206,7 +206,7 @@ describe("stylesheet", () => {
       .my-font *,
       .my-font *::before,
       .my-font *::after {
-          font-family: "My font", monospace;
+          font-family: "My font", var(--specimen-fallback-font, monospace), monospace;
           font-variation-settings: "wdth" var(--wdth),"wght" var(--wght)
       }
     `);
@@ -219,7 +219,7 @@ describe("regular font", () => {
 
     expect(css).toEqual(stripIndent`
       .my-font {
-          font-family: "My font", monospace
+          font-family: "My font", var(--specimen-fallback-font, monospace), monospace
       }
     `);
   });
