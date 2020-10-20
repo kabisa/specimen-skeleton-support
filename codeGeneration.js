@@ -67,7 +67,10 @@ const buildFontFace = (fontData, relativeFontPath) => {
   const fontFace = postcss.atRule({ name: "font-face" });
 
   const decls = [
-    postcss.decl({ prop: "font-family", value: `"${fontData.name}"` }),
+    postcss.decl({
+      prop: "font-family",
+      value: `"${getSelector(fontData, true)}"`
+    }),
     postcss.decl({ prop: "src", value: `url("${relativeFontPath}")` }),
     axisRangeDeclaration(fontData, "font-weight", "wght"),
     axisRangeDeclaration(fontData, "font-stretch", "wdth")
@@ -106,7 +109,10 @@ const buildVariationStyles = fontData => {
   rule.append(
     postcss.decl({
       prop: "font-family",
-      value: `"${fontData.name}", var(--specimen-fallback-font, monospace), monospace`
+      value: `"${getSelector(
+        fontData,
+        true
+      )}", var(--specimen-fallback-font, monospace), monospace`
     })
   );
 
@@ -126,7 +132,10 @@ const buildRegularStyles = fontData => {
   rule.append(
     postcss.decl({
       prop: "font-family",
-      value: `"${fontData.name}", var(--specimen-fallback-font, monospace), monospace`
+      value: `"${getSelector(
+        fontData,
+        true
+      )}", var(--specimen-fallback-font, monospace), monospace`
     })
   );
 
