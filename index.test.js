@@ -28,7 +28,7 @@ describe("buildStylesheet", () => {
 
     expect(stylesheet).toEqual(stripIndent`
       @font-face {
-          font-family: "Fraunces-LightOpMin";
+          font-family: "fraunces-lightopmin";
           src: url("undefined");
           font-weight: 1 1000;
       }
@@ -43,7 +43,7 @@ describe("buildStylesheet", () => {
       .fraunces-lightopmin *,
       .fraunces-lightopmin *::before,
       .fraunces-lightopmin *::after {
-          font-family: "Fraunces-LightOpMin", var(--specimen-fallback-font, monospace), monospace;
+          font-family: "fraunces-lightopmin", var(--specimen-fallback-font, monospace), monospace;
           font-variation-settings: "opsz" var(--opsz),"wght" var(--wght),"WONK" var(--WONK);
       }
     `);

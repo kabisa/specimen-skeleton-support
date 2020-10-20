@@ -9,7 +9,7 @@ const {
 } = require("./codeGeneration");
 
 const variableFontDataFixture = {
-  name: "My font",
+  name: "my-font",
   class: "my-font",
   data: {
     axes: [
@@ -34,7 +34,7 @@ const variableFontDataFixture = {
 };
 
 const staticFontDataFixture = {
-  name: "My font",
+  name: "my-font",
   data: {
     axes: [],
     charset: [],
@@ -45,7 +45,7 @@ const staticFontDataFixture = {
 describe("@font-face", () => {
   test("basic @font-face declaration", () => {
     const fontData = {
-      name: "My font",
+      name: "my-font",
       data: {
         axes: [],
         charset: [],
@@ -60,7 +60,7 @@ describe("@font-face", () => {
 
     expect(fontFace).toEqual(stripIndent`
       @font-face {
-          font-family: "My font";
+          font-family: "my-font";
           src: url("./test/__fixtures__/Fraunces-VF.ttf")
       }
     `);
@@ -68,7 +68,7 @@ describe("@font-face", () => {
 
   test("includes font-weight declaration if wght axis present", () => {
     const fontData = {
-      name: "My font",
+      name: "my-font",
       data: {
         axes: [
           {
@@ -91,7 +91,7 @@ describe("@font-face", () => {
 
     expect(fontFace).toEqual(stripIndent`
       @font-face {
-          font-family: "My font";
+          font-family: "my-font";
           src: url("./test/__fixtures__/Fraunces-VF.ttf");
           font-weight: 1 1000
       }
@@ -100,7 +100,7 @@ describe("@font-face", () => {
 
   test("includes font-stretch if wdth axis present", () => {
     const fontData = {
-      name: "My font",
+      name: "my-font",
       data: {
         axes: [
           {
@@ -123,7 +123,7 @@ describe("@font-face", () => {
 
     expect(fontFace).toEqual(stripIndent`
       @font-face {
-          font-family: "My font";
+          font-family: "my-font";
           src: url("./test/__fixtures__/Fraunces-VF.ttf");
           font-stretch: 50 200
       }
@@ -134,7 +134,7 @@ describe("@font-face", () => {
 describe("css properties", () => {
   test("generates a property per axis", () => {
     const fontData = {
-      name: "My font",
+      name: "my-font",
       data: {
         axes: [
           {
@@ -177,7 +177,7 @@ describe("font variation settings", () => {
       .my-font *,
       .my-font *::before,
       .my-font *::after {
-          font-family: "My font", var(--specimen-fallback-font, monospace), monospace;
+          font-family: "my-font", var(--specimen-fallback-font, monospace), monospace;
           font-variation-settings: "wdth" var(--wdth),"wght" var(--wght)
       }
     `);
@@ -193,7 +193,7 @@ describe("stylesheet", () => {
 
     expect(css).toEqual(stripIndent`
       @font-face {
-          font-family: "My font";
+          font-family: "my-font";
           src: url("./test/__fixtures__/Fraunces-VF.ttf");
           font-weight: 1 1000;
           font-stretch: 50 200
@@ -206,7 +206,7 @@ describe("stylesheet", () => {
       .my-font *,
       .my-font *::before,
       .my-font *::after {
-          font-family: "My font", var(--specimen-fallback-font, monospace), monospace;
+          font-family: "my-font", var(--specimen-fallback-font, monospace), monospace;
           font-variation-settings: "wdth" var(--wdth),"wght" var(--wght)
       }
     `);
@@ -219,7 +219,7 @@ describe("regular font", () => {
 
     expect(css).toEqual(stripIndent`
       .my-font {
-          font-family: "My font", var(--specimen-fallback-font, monospace), monospace
+          font-family: "my-font", var(--specimen-fallback-font, monospace), monospace
       }
     `);
   });
