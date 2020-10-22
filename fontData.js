@@ -206,7 +206,7 @@ module.exports.parseFontFile = async path => {
   const font = await loadFont(path);
 
   return {
-    name: font.postscriptName,
+    name: font.fullName,
     data: {
       axes: buildAxes(font),
       charset: buildChars(font),
