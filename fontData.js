@@ -83,6 +83,13 @@ const suggestFontStyle = fontName => {
 };
 
 const buildChars = font => {
+  const fontCharset = font.characterSet.map(g =>
+    Number(g)
+      .toString(16)
+      .padStart(4, "0")
+      .toUpperCase()
+  );
+
   // undefined = no subcategory
   const categories = {
     Letter: [
@@ -163,9 +170,7 @@ const buildChars = font => {
         );
 
         // Which chars are in the font?
-        const presentChars = chars.filter(g =>
-          font.characterSet.includes(parseInt(g.unicode, 16))
-        );
+        const presentChars = chars.filter(g => fontCharset.includes(g.unicode));
 
         // We only need the unicode values
         const scriptChars = presentChars.map(g => g.unicode);
@@ -195,24 +200,7 @@ const buildChars = font => {
   }
 
   // List all chars not grouped under scripts in a misc category
-  const uncategorised = font.characterSet
-    .filter(
-      g =>
-        !allScriptChars.includes(
-          // Comparing decimal values to hex strings, e.g. 45 → "002D"
-          Number(g)
-            .toString(16)
-            .padStart(4, "0")
-            .toUpperCase()
-        )
-    )
-    .map(g =>
-      Number(g)
-        .toString(16)
-        .padStart(4, "0")
-        .toUpperCase()
-    );
-
+  const uncategorised = fontCharset.filter(g => !allScriptChars.includes(g));
   charset.push({
     category: "Uncategorised",
     subCategory: null,
