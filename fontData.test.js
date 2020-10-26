@@ -1,15 +1,22 @@
 const path = require("path");
 const { parseFontFile, suggestFontStyle } = require("./fontData");
 
-const fixtureFontPath = path.resolve(
+const variableFont = path.resolve(
   __dirname,
   "test",
   "__fixtures__",
   "Fraunces-VF.ttf"
 );
 
+const obscureScriptFont = path.resolve(
+  __dirname,
+  "test",
+  "__fixtures__",
+  "NotoSansSoraSompeng-Regular.woff2"
+);
+
 test("Extracts axes", async () => {
-  const fontData = await parseFontFile(fixtureFontPath);
+  const fontData = await parseFontFile(variableFont);
 
   expect(fontData.data.axes).toEqual([
     {
@@ -37,7 +44,7 @@ test("Extracts axes", async () => {
 });
 
 test("Extracts charset", async () => {
-  const fontData = await parseFontFile(fixtureFontPath);
+  const fontData = await parseFontFile(variableFont);
 
   expect(fontData.data.charset).toEqual([
     {
@@ -185,8 +192,75 @@ test("Extracts charset", async () => {
   ]);
 });
 
+test("Finds uncategorised chars", async () => {
+  const fontData = await parseFontFile(obscureScriptFont);
+
+  expect(fontData.data.charset).toEqual([
+    {
+      category: "Punctuation",
+      chars: ["002D", "2010"],
+      script: null,
+      subCategory: "Dash"
+    },
+    {
+      category: "Separator",
+      chars: ["0000", "000D"],
+      script: null,
+      subCategory: null
+    },
+    {
+      category: "Separator",
+      chars: ["0020", "00A0"],
+      script: null,
+      subCategory: "Space"
+    },
+    {
+      category: "Uncategorised",
+      chars: [
+        "110D0",
+        "110D1",
+        "110D2",
+        "110D3",
+        "110D4",
+        "110D5",
+        "110D6",
+        "110D7",
+        "110D8",
+        "110D9",
+        "110DA",
+        "110DB",
+        "110DC",
+        "110DD",
+        "110DE",
+        "110DF",
+        "110E0",
+        "110E1",
+        "110E2",
+        "110E3",
+        "110E4",
+        "110E5",
+        "110E6",
+        "110E7",
+        "110E8",
+        "110F0",
+        "110F1",
+        "110F2",
+        "110F3",
+        "110F4",
+        "110F5",
+        "110F6",
+        "110F7",
+        "110F8",
+        "110F9"
+      ],
+      script: null,
+      subCategory: null
+    }
+  ]);
+});
+
 test("Extracts instances", async () => {
-  const fontData = await parseFontFile(fixtureFontPath);
+  const fontData = await parseFontFile(variableFont);
 
   expect(fontData.data.instances).toEqual([
     {
