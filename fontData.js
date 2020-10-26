@@ -141,6 +141,7 @@ const buildChars = font => {
   };
 
   let charset = [];
+  let allScriptChars = [];
   for (const category in categories) {
     for (const subCategory of categories[category]) {
       // Get all scripts in this subcategory
@@ -168,6 +169,7 @@ const buildChars = font => {
 
         // We only need the unicode values
         const scriptChars = presentChars.map(g => g.unicode);
+        allScriptChars = [...allScriptChars, ...scriptChars];
 
         if (scriptChars.length !== 0) {
           const subCharset = {
@@ -191,6 +193,32 @@ const buildChars = font => {
       }
     }
   }
+
+  // List all chars not grouped under scripts in a misc category
+  const uncategorised = font.characterSet
+    .filter(
+      g =>
+        !allScriptChars.includes(
+          // Comparing decimal values to hex strings, e.g. 45 → "002D"
+          Number(g)
+            .toString(16)
+            .padStart(4, "0")
+            .toUpperCase()
+        )
+    )
+    .map(g =>
+      Number(g)
+        .toString(16)
+        .padStart(4, "0")
+        .toUpperCase()
+    );
+
+  charset.push({
+    category: "Uncategorised",
+    subCategory: null,
+    script: null,
+    chars: uncategorised || null
+  });
 
   return charset;
 };
