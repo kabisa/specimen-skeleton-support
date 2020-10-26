@@ -28,22 +28,22 @@ describe("buildStylesheet", () => {
 
     expect(stylesheet).toEqual(stripIndent`
       @font-face {
-          font-family: "Fraunces-LightOpMin";
+          font-family: "Fraunces Light OpMin";
           src: url("undefined");
           font-weight: 1 1000;
       }
 
-      .fraunces-lightopmin {
+      .fraunces-light-opmin {
           --opsz: 9;
           --wght: 0;
           --WONK: 0.5;
       }
 
-      .fraunces-lightopmin,
-      .fraunces-lightopmin *,
-      .fraunces-lightopmin *::before,
-      .fraunces-lightopmin *::after {
-          font-family: "Fraunces-LightOpMin", var(--specimen-fallback-font, monospace), monospace;
+      .fraunces-light-opmin,
+      .fraunces-light-opmin *,
+      .fraunces-light-opmin *::before,
+      .fraunces-light-opmin *::after {
+          font-family: "Fraunces Light OpMin", var(--specimen-fallback-font, monospace), monospace;
           font-variation-settings: "opsz" var(--opsz),"wght" var(--wght),"WONK" var(--WONK);
       }
     `);
