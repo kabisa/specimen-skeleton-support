@@ -200,13 +200,19 @@ const buildChars = font => {
   }
 
   // List all chars not grouped under scripts in a misc category
-  const uncategorised = fontCharset.filter(g => !allScriptChars.includes(g));
-  charset.push({
-    category: "Uncategorised",
-    subCategory: null,
-    script: null,
-    chars: uncategorised || null
-  });
+  // Also, ignore 0xFFFF which is erroneously reported as a char
+  // by Fontkit
+  const uncategorisedChars = fontCharset.filter(
+    g => !allScriptChars.includes(g) && g != "FFFF"
+  );
+  if (uncategorisedChars.length !== 0) {
+    charset.push({
+      category: "Uncategorised",
+      subCategory: null,
+      script: null,
+      chars: uncategorisedChars || null
+    });
+  }
 
   return charset;
 };
